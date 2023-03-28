@@ -9,6 +9,11 @@ from cellfinder_core.detect.filters.plane.base_tile_filter import (
 
 class TileWalker(object):
     def __init__(self, img, soma_diameter):
+        """
+        Notes
+        -----
+        Does not modify *img* in place.
+        """
         self.img = img
         self.thresholded_img = img.copy()
         self.img_width, self.img_height = img.shape
@@ -51,6 +56,11 @@ class TileWalker(object):
                 yield x, y, tile
 
     def walk_out_of_brain_only(self):
+        """
+        Notes
+        -----
+        Modifies self.good_tiles_mask in-place.
+        """
         for x, y, tile in self._get_tiles():
             self.x = x
             self.y = y
