@@ -45,16 +45,13 @@ class TileWalker(object):
             for x in range(
                 0, self.img_width - self.tile_width, self.tile_width
             ):
-                read_tile = self.img[
+                tile = self.img[
                     x : x + self.tile_width, y : y + self.tile_height
                 ]
-                write_tile = self.thresholded_img[
-                    x : x + self.tile_width, y : y + self.tile_height
-                ]
-                yield x, y, read_tile, write_tile
+                yield x, y, tile
 
     def walk_out_of_brain_only(self):
-        for x, y, tile, write_tile in self._get_tiles():
+        for x, y, tile in self._get_tiles():
             self.x = x
             self.y = y
             self.ftf.set_tile(tile)
