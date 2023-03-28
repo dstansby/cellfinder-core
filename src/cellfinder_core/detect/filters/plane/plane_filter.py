@@ -40,8 +40,9 @@ class TileProcessor:
 
         walker.walk_out_of_brain_only()
 
+        thresholded_img = plane.copy()
         thresholded_img = enhance_peaks(
-            walker.thresholded_img,
+            thresholded_img,
             self.clipping_value,
             gaussian_sigma=laplace_gaussian_sigma,
         )

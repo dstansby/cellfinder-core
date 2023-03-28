@@ -15,7 +15,6 @@ class TileWalker(object):
         Does not modify *img* in place.
         """
         self.img = img
-        self.thresholded_img = img.copy()
         self.img_width, self.img_height = img.shape
         self.soma_diameter = soma_diameter
         self.tile_width = self.soma_diameter * 2
