@@ -36,20 +36,21 @@ class TileProcessor:
         # Read plane from a dask array into memory as a numpy array
         plane = np.array(plane)
 
+        # Get a good tiles mask
         walker = TileWalker(plane, self.soma_diameter)
-
         walker.walk_out_of_brain_only()
+        good_tiles_mask = walker.good_tiles_mask.astype(np.uint8)
 
+        # Clip the plane values using a thresholded image
         thresholded_img = plane.copy()
         thresholded_img = enhance_peaks(
             thresholded_img,
             self.clipping_value,
             gaussian_sigma=laplace_gaussian_sigma,
         )
-
-        avg = thresholded_img.ravel().mean()
-        sd = thresholded_img.ravel().std()
+        avg = np.mean(thresholded_img)
+        sd = np.std(thresholded_img)
         threshold = avg + self.n_sds_above_mean_thresh * sd
-
         plane[thresholded_img > threshold] = self.threshold_value
-        return plane, walker.good_tiles_mask.astype(np.uint8)
+
+        return plane, good_tiles_mask
