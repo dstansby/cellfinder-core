@@ -22,6 +22,7 @@ extensions = [
     # napoleon has to come before autodoc_typehints
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",
+    "sphinx.ext.intersphinx",
 ]
 # automodapi config
 numpydoc_show_class_members = False
@@ -33,6 +34,12 @@ typehints_defaults = "comma"
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_use_param = True
+
+# Links between sphinx projects
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
+}
 
 # Don't allow broken internal links
 nitpicky = True
