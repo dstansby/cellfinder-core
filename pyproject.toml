@@ -49,6 +49,10 @@ dev = [
     "pytest-timeout",
     "tox",
 ]
+docs = [
+    "sphinx",
+    "brainglobe-sphinx-config",
+]
 
 [project.scripts]
 cellfinder_download = "cellfinder_core.download.cli:main"
