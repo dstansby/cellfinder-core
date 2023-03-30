@@ -49,6 +49,8 @@ def main(
     detect_finished_callback: Optional[Callable[[list], None]] = None,
 ):
     """
+    Find some cells.
+
     Parameters
     ----------
     detect_callback :
