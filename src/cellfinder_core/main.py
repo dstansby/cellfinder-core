@@ -14,10 +14,6 @@ from cellfinder_core.train.train_yml import depth_type
 
 __all__ = ["main", "suppress_tf_logging"]
 
-tf_suppress_log_messages = [
-    "multiprocessing can interact badly with TensorFlow"
-]
-
 
 def main(
     signal_array: np.ndarray,
@@ -117,8 +113,15 @@ def main(
     return points
 
 
+tf_suppress_log_messages = [
+    "multiprocessing can interact badly with TensorFlow"
+]
+
+
 def suppress_tf_logging(tf_suppress_log_messages):
     """
+    Suppress tensorflow logging.
+
     Prevents many lines of logs such as:
     "2019-10-24 16:54:41.363978: I tensorflow/stream_executor/platform/default
     /dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1"
