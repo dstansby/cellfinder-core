@@ -29,6 +29,7 @@ automodapi_toctreedirnm = "_automodapi"
 
 # Configure type hints and docstrings
 autodoc_typehints = "description"
+typehints_defaults = "comma"
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_use_param = True
