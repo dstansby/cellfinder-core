@@ -10,6 +10,8 @@ cellfinder-core
    :maxdepth: 2
    :caption: Contents:
 
+   api/index
+
 
 
 Indices and tables

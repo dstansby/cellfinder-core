@@ -12,6 +12,8 @@ from cellfinder_core import logger
 from cellfinder_core.download.models import model_type
 from cellfinder_core.train.train_yml import depth_type
 
+__all__ = ["main", "suppress_tf_logging"]
+
 tf_suppress_log_messages = [
     "multiprocessing can interact badly with TensorFlow"
 ]

@@ -50,8 +50,9 @@ dev = [
     "tox",
 ]
 docs = [
-    "sphinx",
     "brainglobe-sphinx-config",
+    "sphinx",
+    "sphinx-automodapi",
 ]
 
 [project.scripts]

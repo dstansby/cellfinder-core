@@ -6,16 +6,22 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'cellfinder-core'
-copyright = '2023, cellfinder-core contributors'
-author = 'cellfinder-core contributors'
-
-
 from brainglobe_sphinx_config import *
+
+project = "cellfinder-core"
+copyright = "2023, cellfinder-core contributors"
+author = "cellfinder-core contributors"
+
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = ["sphinx_automodapi.automodapi"]
+# automodapi config
+numpydoc_show_class_members = False
+automodapi_toctreedirnm = "_automodapi"
 
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+# Don't allow broken internal links
+nitpicky = True
+
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]

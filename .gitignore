@@ -71,7 +71,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-doc/build/
+docs/_build/
+docs/_automodapi/
 
 # pydocmd
 _build/
