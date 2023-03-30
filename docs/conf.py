@@ -16,10 +16,22 @@ author = "cellfinder-core contributors"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx_automodapi.automodapi"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx_automodapi.automodapi",
+    # napoleon has to come before autodoc_typehints
+    "sphinx.ext.napoleon",
+    "sphinx_autodoc_typehints",
+]
 # automodapi config
 numpydoc_show_class_members = False
 automodapi_toctreedirnm = "_automodapi"
+
+# Configure type hints and docstrings
+autodoc_typehints = "description"
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_param = True
 
 # Don't allow broken internal links
 nitpicky = True

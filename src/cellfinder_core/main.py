@@ -51,13 +51,13 @@ def main(
     """
     Parameters
     ----------
-    detect_callback : Callable[int], optional
+    detect_callback :
         Called every time a plane has finished being processed during the
         detection stage. Called with the plane number that has finished.
-    classify_callback : Callable[int], optional
+    classify_callback :
         Called every time tensorflow has finished classifying a point.
         Called with the batch number that has just finished.
-    detect_finished_callback : Callable[list], optional
+    detect_finished_callback :
         Called after detection is finished with the list of detected points.
     """
     suppress_tf_logging(tf_suppress_log_messages)

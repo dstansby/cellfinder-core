@@ -52,7 +52,9 @@ dev = [
 docs = [
     "brainglobe-sphinx-config",
     "sphinx",
+    "sphinx-autodoc-typehints",
     "sphinx-automodapi",
+    "sphinx.ext.napoleon",
 ]
 
 [project.scripts]
