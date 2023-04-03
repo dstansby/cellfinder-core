@@ -98,7 +98,6 @@ def main(
 
     setup_params = (
         signal_array[0, :, :],
-        soma_diameter,
         ball_xy_size,
         ball_z_size,
         ball_overlap_fraction,

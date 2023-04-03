@@ -26,9 +26,9 @@ class VolumeFilter(object):
     def __init__(
         self,
         *,
-        soma_diameter: float,
+        soma_diameter: int,
         soma_size_spread_factor: float = 1.4,
-        setup_params: Tuple[np.ndarray, Any, int, int, float, Any],
+        setup_params: Tuple[np.ndarray, int, int, float, Any],
         planes_paths_range: Sequence,
         save_planes: bool = False,
         plane_directory: Optional[str] = None,
@@ -54,16 +54,16 @@ class VolumeFilter(object):
 
         self.ball_filter = get_ball_filter(
             plane=self.setup_params[0],
-            soma_diameter=self.setup_params[1],
-            ball_xy_size=self.setup_params[2],
-            ball_z_size=self.setup_params[3],
-            ball_overlap_fraction=self.setup_params[4],
+            soma_diameter=soma_diameter,
+            ball_xy_size=self.setup_params[1],
+            ball_z_size=self.setup_params[2],
+            ball_overlap_fraction=self.setup_params[3],
         )
 
         self.cell_detector = get_cell_detector(
             plane_shape=self.setup_params[0].shape,
-            ball_z_size=self.setup_params[3],
-            z_offset=self.setup_params[5],
+            ball_z_size=self.setup_params[2],
+            z_offset=self.setup_params[4],
         )
 
     def process(
