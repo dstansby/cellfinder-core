@@ -8,7 +8,7 @@ import numpy as np
 from imlib.cells.cells import Cell
 from imlib.general.system import get_num_processes
 
-from cellfinder_core.detect.filters.plane import TileProcessor
+from cellfinder_core.detect.filters.plane import get_tile_mask
 from cellfinder_core.detect.filters.setup_filters import setup_tile_filtering
 from cellfinder_core.detect.filters.volume.volume_filter import VolumeFilter
 
@@ -121,7 +121,7 @@ def main(
 
     clipping_val, threshold_value = setup_tile_filtering(signal_array[0, :, :])
     # Create 2D analysis filter
-    mp_tile_processor = TileProcessor(
+    tile_processor_args = (
         clipping_val,
         threshold_value,
         soma_diameter,
@@ -142,7 +142,7 @@ def main(
         # (e.g. using np.array(plane)) here then there shouldn't be an issue
         for plane in signal_array:
             res = worker_pool.apply_async(
-                mp_tile_processor.get_tile_mask, args=(plane,)
+                get_tile_mask, args=(plane, *tile_processor_args)
             )
             async_results.put(res)
 
