@@ -16,17 +16,23 @@ if __name__ == "__main__":
     signal_array = read_with_dask(signal_data_path)
 
     clipping_value, threshold_value = setup_tile_filtering(signal_array[0])
+    ball_z_size = 3
 
     @delayed
-    def processed_mean(plane):
-        plane, _ = get_tile_mask(plane, clipping_value, threshold_value, 4, 0.2, 10)
-        return np.mean(plane)
+    def _get_tile_mask(plane):
+        return get_tile_mask(plane, clipping_value, threshold_value, 4, 0.2, 10)
 
-    new_planes = []
+    @delayed
+    def _ball_filter(plane_masks: list):
+        pass
+
+    tile_masks = []
     for plane in signal_array[:20]:
-        new_planes.append(processed_mean(plane))
+        tile_masks.append(_get_tile_mask(plane))
 
-    new_planes = delayed(new_planes)
-    new_planes.visualize(filename="plane_filtered.png")
-    new_planes = new_planes.compute()
-    print(new_planes)
+    ball_filtered_planes = []
+    for i in range(0, len(tile_masks) - ball_z_size):
+        ball_filtered_planes.append(_ball_filter(tile_masks[i:i+ball_z_size]))
+
+    ball_filtered_planes = delayed(ball_filtered_planes)
+    ball_filtered_planes.visualize(filename="ball_filtered.png")
