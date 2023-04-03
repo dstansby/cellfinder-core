@@ -1,7 +1,7 @@
 import math
 import os
 from queue import Queue
-from typing import Any, Callable, List, Optional, Sequence, Tuple
+from typing import Callable, List, Optional, Sequence, Tuple
 
 import numpy as np
 from imlib.cells.cells import Cell
@@ -28,7 +28,7 @@ class VolumeFilter(object):
         *,
         soma_diameter: int,
         soma_size_spread_factor: float = 1.4,
-        setup_params: Tuple[np.ndarray, int, int, float, Any],
+        setup_params: Tuple[np.ndarray, int, int, float],
         planes_paths_range: Sequence,
         save_planes: bool = False,
         plane_directory: Optional[str] = None,
@@ -63,7 +63,7 @@ class VolumeFilter(object):
         self.cell_detector = get_cell_detector(
             plane_shape=self.setup_params[0].shape,
             ball_z_size=self.setup_params[2],
-            z_offset=self.setup_params[4],
+            z_offset=start_plane,
         )
 
     def process(

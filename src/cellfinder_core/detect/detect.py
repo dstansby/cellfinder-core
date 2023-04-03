@@ -101,7 +101,6 @@ def main(
         ball_xy_size,
         ball_z_size,
         ball_overlap_fraction,
-        start_plane,
     )
 
     # Create 3D analysis filter

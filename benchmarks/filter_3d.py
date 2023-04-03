@@ -20,7 +20,6 @@ setup_params = (
     3,  # ball_xy_size,
     ball_z_size,
     0.6,  # ball_overlap_fraction,
-    0,  # start_plane,
 )
 
 mp_3d_filter = VolumeFilter(
