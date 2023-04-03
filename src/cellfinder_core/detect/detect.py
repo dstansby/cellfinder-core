@@ -96,17 +96,13 @@ def main(
     if signal_array.ndim != 3:
         raise IOError("Input data must be 3D")
 
-    setup_params = (
-        signal_array[0, :, :],
-        ball_xy_size,
-        ball_z_size,
-        ball_overlap_fraction,
-    )
-
     # Create 3D analysis filter
     mp_3d_filter = VolumeFilter(
         soma_diameter=soma_diameter,
-        setup_params=setup_params,
+        plane=signal_array[0, :, :],
+        ball_xy_size=ball_xy_size,
+        ball_z_size=ball_z_size,
+        ball_overlap_fraction=ball_overlap_fraction,
         soma_size_spread_factor=soma_spread_factor,
         planes_paths_range=signal_array,
         save_planes=save_planes,

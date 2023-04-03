@@ -1,14 +1,13 @@
 import math
 import os
 from queue import Queue
-from typing import Callable, List, Optional, Sequence, Tuple
+from typing import Callable, List, Optional, Sequence
 
-import numpy as np
 from imlib.cells.cells import Cell
 from tifffile import tifffile
 from tqdm import tqdm
 
-from cellfinder_core import logger
+from cellfinder_core import logger, types
 from cellfinder_core.detect.filters.setup_filters import (
     get_ball_filter,
     get_cell_detector,
@@ -28,7 +27,10 @@ class VolumeFilter(object):
         *,
         soma_diameter: int,
         soma_size_spread_factor: float = 1.4,
-        setup_params: Tuple[np.ndarray, int, int, float],
+        plane: types.array,
+        ball_xy_size: int,
+        ball_z_size: int,
+        ball_overlap_fraction: float,
         planes_paths_range: Sequence,
         save_planes: bool = False,
         plane_directory: Optional[str] = None,
@@ -37,6 +39,13 @@ class VolumeFilter(object):
         outlier_keep: bool = False,
         artifact_keep: bool = True,
     ):
+        """
+        Parameters
+        ----------
+        planes_paths_range :
+            The length of this iterable is used to to set the number of planes
+            being processed on the progress bar.
+        """
         self.soma_diameter = soma_diameter
         self.soma_size_spread_factor = soma_size_spread_factor
         self.planes_paths_range = planes_paths_range
@@ -50,19 +59,18 @@ class VolumeFilter(object):
 
         self.clipping_val = None
         self.threshold_value = None
-        self.setup_params = setup_params
 
         self.ball_filter = get_ball_filter(
-            plane=self.setup_params[0],
+            plane=plane,
             soma_diameter=soma_diameter,
-            ball_xy_size=self.setup_params[1],
-            ball_z_size=self.setup_params[2],
-            ball_overlap_fraction=self.setup_params[3],
+            ball_xy_size=ball_xy_size,
+            ball_z_size=ball_z_size,
+            ball_overlap_fraction=ball_overlap_fraction,
         )
 
         self.cell_detector = get_cell_detector(
-            plane_shape=self.setup_params[0].shape,
-            ball_z_size=self.setup_params[2],
+            plane_shape=plane.shape,
+            ball_z_size=ball_z_size,
             z_offset=start_plane,
         )
 
