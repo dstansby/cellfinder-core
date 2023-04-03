@@ -7,6 +7,7 @@ from cellfinder_core.detect.filters.volume.ball_filter import BallFilter
 from cellfinder_core.detect.filters.volume.structure_detection import (
     CellDetector,
 )
+from cellfinder_core import types
 from cellfinder_core.tools.tools import get_max_possible_value
 
 
@@ -47,7 +48,7 @@ def get_cell_detector(
     return CellDetector(layer_width, layer_height, start_z=start_z)
 
 
-def setup_tile_filtering(plane: np.ndarray) -> Tuple[int, int]:
+def setup_tile_filtering(plane: types.array) -> Tuple[int, int]:
     max_value = get_max_possible_value(plane)
     clipping_value = max_value - 2
     thrsh_val = max_value - 1
