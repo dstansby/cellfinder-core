@@ -78,7 +78,6 @@ uint_2d_type = types.uint64[:, :]
 spec = [
     ("SOMA_CENTRE_VALUE", types.uint64),
     ("z", types.uint64),
-    ("relative_z", types.uint64),
     ("next_structure_id", types.uint64),
     ("shape", types.UniTuple(types.int64, 2)),
     ("obsolete_ids", DictType(types.int64, types.int64)),
@@ -93,10 +92,6 @@ class CellDetector:
         self.z = start_z
 
         self.SOMA_CENTRE_VALUE = UINT64_MAX
-
-        # position to append in stack
-        # FIXME: replace by keeping start_z and self.z > self.start_Z
-        self.relative_z = 0
         self.next_structure_id = 1
 
         # Mapping from obsolete IDs to the IDs that they have been
@@ -135,9 +130,6 @@ class CellDetector:
             layer *= numba.uint64(4294967297)
 
         processed_layer = self.connect_four(layer, previous_layer)
-
-        if self.relative_z == 0:
-            self.relative_z += 1
 
         self.z += 1
         return processed_layer
