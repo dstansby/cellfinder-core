@@ -164,7 +164,6 @@ class BallFilter:
         """
         Get the plane in the middle of self.volume.
         """
-        z = self.middle_z_idx
         return np.array(self.volume[:, :, z], dtype=np.uint16)
 
     def walk(self) -> None:  # Highly optimised because most time critical
@@ -194,6 +193,9 @@ class BallFilter:
             self.THRESHOLD_VALUE,
             self.SOMA_CENTRE_VALUE,
         )
+
+        z = self.middle_z_idx
+        return np.array(self.volume[:, :, z], dtype=np.uint16)
 
 
 @jit(nopython=True, cache=True)

@@ -136,11 +136,37 @@ def main(
     filtered_2d = []
     for plane in signal_array[start_plane:end_plane]:
         plane_mask = _get_tile_mask(plane)
-        filtered_2d.append(np.mean(plane_mask[0]))
+        filtered_2d.append(plane_mask)
 
-    filtered_2d = delayed(filtered_2d)
-    filtered_2d.visualize("filtered_2d.png")
-    filtered_2d = filtered_2d.compute()
+    # Setup 3D filtering
+    @delayed
+    def _ball_filter(tile_masks):
+        mp_3d_filter = VolumeFilter(
+            soma_diameter=soma_diameter,
+            setup_params=setup_params,
+            soma_size_spread_factor=soma_spread_factor,
+            planes_paths_range=signal_array,
+            save_planes=save_planes,
+            plane_directory=plane_directory,
+            start_plane=start_plane,
+            max_cluster_size=max_cluster_size,
+            outlier_keep=outlier_keep,
+            artifact_keep=artifact_keep,
+        )
+        ball_filter = mp_3d_filter.ball_filter
+        for plane, mask in tile_masks:
+            ball_filter.append(plane, mask)
+
+        return ball_filter.walk()
+
+    filtered_3d = []
+    for i in range(0, len(signal_array) - ball_z_size):
+        new_plane = _ball_filter(filtered_2d[i : i + ball_z_size])
+        filtered_3d.append(np.mean(new_plane))
+
+    filtered_3d = delayed(filtered_3d)
+    filtered_3d.visualize("filtered_3d.png")
+    filtered_3d = filtered_3d.compute()
     exit()
 
     mp_ctx = multiprocessing.get_context("spawn")
