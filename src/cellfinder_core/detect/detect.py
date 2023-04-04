@@ -5,8 +5,8 @@ from typing import Callable, List, Optional, Tuple, Union
 
 import dask.array as da
 import numpy as np
+from dask import delayed
 from imlib.cells.cells import Cell
-from imlib.general.system import get_num_processes
 
 from cellfinder_core.detect.filters.plane import get_tile_mask
 from cellfinder_core.detect.filters.setup_filters import setup_tile_filtering
@@ -71,7 +71,6 @@ def main(
             "signal_array must be integer datatype, but has datatype "
             f"{signal_array.dtype}"
         )
-    n_processes = get_num_processes(min_free_cpu_cores=n_free_cpus)
     start_time = datetime.now()
 
     (
@@ -128,6 +127,21 @@ def main(
         log_sigma_size,
         n_sds_above_mean_thresh,
     )
+
+    # Setup 2D filtering
+    @delayed
+    def _get_tile_mask(tile):
+        return get_tile_mask(plane, *tile_processor_args)
+
+    filtered_2d = []
+    for plane in signal_array[start_plane:end_plane]:
+        plane_mask = _get_tile_mask(plane)
+        filtered_2d.append(np.mean(plane_mask[0]))
+
+    filtered_2d = delayed(filtered_2d)
+    filtered_2d.visualize("filtered_2d.png")
+    filtered_2d = filtered_2d.compute()
+    exit()
 
     mp_ctx = multiprocessing.get_context("spawn")
     with mp_ctx.Pool(n_processes) as worker_pool:
