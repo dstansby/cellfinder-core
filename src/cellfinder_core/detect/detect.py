@@ -10,6 +10,9 @@ from imlib.cells.cells import Cell
 
 from cellfinder_core.detect.filters.plane import get_tile_mask
 from cellfinder_core.detect.filters.setup_filters import setup_tile_filtering
+from cellfinder_core.detect.filters.volume.structure_detection import (
+    CellDetector,
+)
 from cellfinder_core.detect.filters.volume.volume_filter import VolumeFilter
 
 
@@ -162,11 +165,32 @@ def main(
     filtered_3d = []
     for i in range(0, len(signal_array) - ball_z_size):
         new_plane = _ball_filter(filtered_2d[i : i + ball_z_size])
-        filtered_3d.append(np.mean(new_plane))
+        filtered_3d.append(new_plane)
 
-    filtered_3d = delayed(filtered_3d)
-    filtered_3d.visualize("filtered_3d.png")
-    filtered_3d = filtered_3d.compute()
+    # Set up structure detection
+    @delayed
+    def _detect_structures(
+        plane, structs
+    ):
+        previous_plane, z, next_structure_id, obsolete_ids, coords_maps = structs
+        detector = CellDetector(
+            *plane.shape,
+            start_z=z,
+            next_structure_id=next_structure_id,
+            obsolete_ids=obsolete_ids,
+            coords_maps=coords_maps,
+        )
+        return detector.process(plane, previous_plane)
+
+    structs = (None, start_plane, 1, None, None)
+    for plane in filtered_3d:
+        structs = _detect_structures(plane, structs)
+
+    structs = delayed(structs)
+    # structs.visualize("structs.png")
+    structs = structs.compute()
+    return structs
+    # filtered_3d = filtered_3d.compute()
     exit()
 
     mp_ctx = multiprocessing.get_context("spawn")

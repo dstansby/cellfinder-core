@@ -25,10 +25,11 @@ if __name__ == "__main__":
 
     print(f"Plane size: {plane_size_mb:.02f} MB")
 
-    main(
+    structs = main(
         signal_array,
         background_array=signal_array,
         voxel_sizes=[5, 2, 2],
         ball_z_size=15,
         ball_xy_size=4,
     )
+    print(structs)

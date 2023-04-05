@@ -147,7 +147,13 @@ class CellDetector:
         processed_layer = self.connect_four(layer, previous_layer)
 
         self.z += 1
-        return processed_layer
+        return (
+            processed_layer,
+            self.z,
+            self.next_structure_id,
+            self.obsolete_ids,
+            self.coords_maps,
+        )
 
     def connect_four(
         self, layer: np.ndarray, previous_layer: Optional[np.ndarray]
