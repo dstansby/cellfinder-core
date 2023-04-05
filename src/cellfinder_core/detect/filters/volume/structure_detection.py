@@ -87,22 +87,37 @@ spec = [
 
 @jitclass(spec=spec)
 class CellDetector:
-    def __init__(self, width: int, height: int, start_z: int):
+    def __init__(
+        self,
+        width: int,
+        height: int,
+        start_z: int,
+        next_structure_id: int = 1,
+        obsolete_ids: Optional[DictType] = None,
+        coords_maps: Optional[DictType] = None,
+    ):
         self.shape = width, height
         self.z = start_z
 
         self.SOMA_CENTRE_VALUE = UINT64_MAX
-        self.next_structure_id = 1
+        self.next_structure_id = next_structure_id
 
         # Mapping from obsolete IDs to the IDs that they have been
         # made obsolete by
-        self.obsolete_ids = Dict.empty(
-            key_type=types.int64, value_type=types.int64
-        )
+        if obsolete_ids is None:
+            self.obsolete_ids = Dict.empty(
+                key_type=types.int64, value_type=types.int64
+            )
+        else:
+            self.obsolete_ids = obsolete_ids
+
         # Mapping from IDs to list of points in that structure
-        self.coords_maps = Dict.empty(
-            key_type=types.int64, value_type=uint_2d_type
-        )
+        if coords_maps is None:
+            self.coords_maps = Dict.empty(
+                key_type=types.int64, value_type=uint_2d_type
+            )
+        else:
+            self.coords_maps = coords_maps
 
     def process(
         self, layer: np.ndarray, previous_layer: np.ndarray
